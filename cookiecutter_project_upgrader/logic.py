@@ -91,6 +91,7 @@ def update_project_template_branch(context: MutableMapping[str, str], project_di
         if exclude_pathspecs:
             click.echo("Excluding git pathspecs of: '{}'".format(exclude_pathspecs))
             subprocess.run(["git", "reset", "HEAD", exclude_pathspecs], cwd=tmp_git_worktree_directory, check=True)
+            subprocess.run(["git", "checkout", exclude_pathspecs], cwd=tmp_git_worktree_directory, check=True)
 
         has_changes = _git_repository_has_local_changes(Path(tmp_git_worktree_directory))
         if has_changes:
