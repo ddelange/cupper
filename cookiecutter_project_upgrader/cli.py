@@ -16,9 +16,12 @@ from cookiecutter_project_upgrader.logic import update_project_template_branch
 @click.option('--push-template-branch-changes', '-p', type=bool, default=None,
               help="Push changes to the remote Git branch on a successful update, "
                    "default: ask if interactive, otherwise false.")
+@click.option('--exclude', '-e', type=str, default=None,
+              help="Git pathspecs to exclude files")
 def main(context_file: str, branch: str,
          merge_now: Optional[bool],
-         push_template_branch_changes: Optional[bool]):
+         push_template_branch_changes: Optional[bool],
+         exclude: str):
     """Upgrade projects created from a Cookiecutter template"""
     context = _load_context(context_file)
     project_directory = os.getcwd()
@@ -26,7 +29,8 @@ def main(context_file: str, branch: str,
                                    project_directory,
                                    branch,
                                    merge_now,
-                                   push_template_branch_changes)
+                                   push_template_branch_changes,
+                                   exclude)
 
 
 def _load_context(context_file: str):

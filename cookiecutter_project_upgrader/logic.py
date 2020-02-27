@@ -46,7 +46,8 @@ def _git_repository_has_local_changes(git_repository: Path):
 
 
 def update_project_template_branch(context: MutableMapping[str, str], project_directory: str, branch: str,
-                                   merge_now: Optional[bool], push_template_branch_changes: Optional[bool]):
+                                   merge_now: Optional[bool], push_template_branch_changes: Optional[bool],
+                                   exclude_pathspecs: Optional[str]):
     """Update template branch from a template url"""
     template_url = context['_template']
     tmp_directory = os.path.join(project_directory, ".git", "cookiecutter")
@@ -86,6 +87,11 @@ def update_project_template_branch(context: MutableMapping[str, str], project_di
 
         # commit to template branch
         subprocess.run(["git", "add", "-A", "."], cwd=tmp_git_worktree_directory, check=True)
+
+        if exclude_pathspecs:
+            click.echo("Excluding git pathspecs of: '{}'".format(exclude_pathspecs))
+            subprocess.run(["git", "reset", "HEAD", exclude_pathspecs], cwd=tmp_git_worktree_directory, check=True)
+
         has_changes = _git_repository_has_local_changes(Path(tmp_git_worktree_directory))
         if has_changes:
             click.echo("Committing changes...")

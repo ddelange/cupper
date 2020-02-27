@@ -1,1 +1,1 @@
-initial from initial template
+initial from initial template for {{ cookiecutter.project_slug }}
