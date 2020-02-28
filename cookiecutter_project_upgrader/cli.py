@@ -34,6 +34,11 @@ def main(context_file: str, branch: str,
 
 
 def _load_context(context_file: str):
-    context_str = Path(context_file).read_text(encoding="utf-8")
+    try:
+        context_str = Path(context_file).read_text(encoding="utf-8")
+    except FileNotFoundError:
+        click.echo(f"Context file not found at: {context_file}"
+                   f"Make sure you are in the right directory")
+        exit(1)
     context = json.loads(context_str)
     return context
