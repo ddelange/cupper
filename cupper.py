@@ -26,7 +26,7 @@ class TemporaryWorkdir():
 
         os.makedirs(self.path)
         subprocess.check_call(["git", "worktree",  "add", "--no-checkout", self.path, self.branch],
-                       cwd=self.repo)
+                              cwd=self.repo)
 
     def __exit__(self, type, value, traceback):
         shutil.rmtree(self.path)
@@ -43,10 +43,10 @@ def update_template(context, root, branch):
     context['project_slug'] = project_slug
     # create a template branch if necessary
     if subprocess.run(["git", "rev-parse", "-q", "--verify", branch], cwd=root).returncode != 0:
-        firstref = subprocess.check_call(["git", "rev-list", "--max-parents=0", "--max-count=1", "HEAD"],
-                                  cwd=root,
-                                  stdout=subprocess.PIPE,
-                                  universal_newlines=True).stdout.strip()
+        firstref = subprocess.check_output(["git", "rev-list", "--max-parents=0", "--max-count=1", "HEAD"],
+                                           cwd=root,
+                                           stdout=subprocess.PIPE,
+                                           universal_newlines=True).strip()
         subprocess.check_call(["git", "branch", branch, firstref])
 
     with TemporaryWorkdir(tmp_workdir, repo=root, branch=branch):
@@ -60,7 +60,7 @@ def update_template(context, root, branch):
         # commit to template branch
         subprocess.check_call(["git", "add", "-A", "."], cwd=tmp_workdir)
         subprocess.check_call(["git", "commit", "-nm", "Update template"],
-                       cwd=tmp_workdir)
+                              cwd=tmp_workdir)
 
 def main():
     import sys
