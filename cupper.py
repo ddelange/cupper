@@ -59,7 +59,7 @@ def update_template(context, root, branch):
 
         # commit to template branch
         subprocess.run(["git", "add", "-A", "."], cwd=tmp_workdir)
-        subprocess.run(["git", "commit", "-m", "Update template"],
+        subprocess.run(["git", "commit", "-nm", "Update template"],
                        cwd=tmp_workdir)
 
 def main():
