@@ -42,8 +42,8 @@ def update_template(context, root, branch):
 
     context['project_slug'] = project_slug
     # create a template branch if necessary
-    if subprocess.check_call(["git", "rev-parse", "-q", "--verify", branch], cwd=root).returncode != 0:
-        firstref = subprocess.run(["git", "rev-list", "--max-parents=0", "--max-count=1", "HEAD"],
+    if subprocess.run(["git", "rev-parse", "-q", "--verify", branch], cwd=root).returncode != 0:
+        firstref = subprocess.check_call(["git", "rev-list", "--max-parents=0", "--max-count=1", "HEAD"],
                                   cwd=root,
                                   stdout=subprocess.PIPE,
                                   universal_newlines=True).stdout.strip()
