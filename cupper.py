@@ -58,8 +58,8 @@ def update_template(context, root, branch):
 
         # commit to template branch
         subprocess.check_call(["git", "add", "-A", "."], cwd=tmp_workdir)
-        if b'nothing to commit' not in subprocess.check_output(["git", "status"],
-                                                              cwd=tmp_workdir):
+        if b"nothing to commit" not in subprocess.check_output(["git", "status"],
+                                                               cwd=tmp_workdir):
             subprocess.check_call(["git", "commit", "-nm", "Update template"],
                                   cwd=tmp_workdir)
 
