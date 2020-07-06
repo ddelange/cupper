@@ -45,7 +45,6 @@ def update_template(context, root, branch):
     if subprocess.run(["git", "rev-parse", "-q", "--verify", branch], cwd=root).returncode != 0:
         firstref = subprocess.check_output(["git", "rev-list", "--max-parents=0", "--max-count=1", "HEAD"],
                                            cwd=root,
-                                           stdout=subprocess.PIPE,
                                            universal_newlines=True).strip()
         subprocess.check_call(["git", "branch", branch, firstref])
 
@@ -59,8 +58,10 @@ def update_template(context, root, branch):
 
         # commit to template branch
         subprocess.check_call(["git", "add", "-A", "."], cwd=tmp_workdir)
-        subprocess.check_call(["git", "commit", "-nm", "Update template"],
-                              cwd=tmp_workdir)
+        if b'nothing to commit' not in subprocess.check_output(["git", "status"],
+                                                              cwd=tmp_workdir):
+            subprocess.check_call(["git", "commit", "-nm", "Update template"],
+                                  cwd=tmp_workdir)
 
 def main():
     import sys
