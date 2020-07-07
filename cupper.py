@@ -25,7 +25,7 @@ class TemporaryWorkdir():
             raise Exception("Temporary directory already exists: %s" % self.path)
 
         os.makedirs(self.path)
-        subprocess.check_call(["git", "worktree",  "add", "--no-checkout", self.path, self.branch],
+        subprocess.check_call(["git", "worktree", "add", "--no-checkout", self.path, self.branch],
                               cwd=self.repo)
 
     def __exit__(self, type, value, traceback):
