@@ -129,6 +129,7 @@ def update_project_template_branch(context: MutableMapping[str, str], project_di
 
     else:
         click.echo("No changes found")
+        exit(1)
 
 
 def _determine_option(current_value: Optional[bool], interactive_question_text: str, interactive: bool):
