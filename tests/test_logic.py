@@ -144,8 +144,9 @@ def test_change_project_slug(cookiecutter_template_directory: Path,
     assert project_directory.joinpath(new_project_slug).is_dir()
     assert not project_directory.joinpath(old_project_slug).exists()
 
+
 def test_exclude_paths(cookiecutter_template_directory: Path,
-                             cookies: Cookies):
+                       cookies: Cookies):
     result: Result = cookies.bake(extra_context=SAMPLE_CONTEXT, template=str(cookiecutter_template_directory))
     if result.exception is not None:
         raise result.exception
@@ -160,7 +161,8 @@ def test_exclude_paths(cookiecutter_template_directory: Path,
     context['project_slug'] = 'a_new_name'
 
     update_project_template_branch(context, str(project_directory), "cookiecutter-template", merge_now=True,
-                                   push_template_branch_changes=False, exclude_pathspecs=('README.rst',), interactive=False)
+                                   push_template_branch_changes=False, exclude_pathspecs=('README.rst',),
+                                   interactive=False)
 
     readme = project_directory.joinpath("README.rst").read_text(encoding="utf-8")
     assert 'a_new_name' not in readme
