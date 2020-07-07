@@ -7,19 +7,21 @@ from typing import Optional
 from cookiecutter_project_upgrader.logic import update_project_template_branch
 
 
-@click.command()
+@click.command(context_settings={"help_option_names": ["-h", "--help"]})
 @click.option('--context-file', '-c', type=click.Path(file_okay=True, readable=True, allow_dash=True),
               default="docs/cookiecutter_input.json", help="Default: docs/cookiecutter_input.json")
 @click.option('--branch', '-b', default="cookiecutter-template", help="Default: cookiecutter-template")
+@click.option('--interactive', '-i', is_flag=True,
+              help="Enter interactive mode. Default behaviour: skip questions, use defaults.")
 @click.option('--merge-now', '-m', type=bool, default=None,
               help="Execute a git merge after a successful update, default: ask if interactive, otherwise false.")
 @click.option('--push-template-branch-changes', '-p', type=bool, default=None,
               help="Push changes to the remote Git branch on a successful update, "
                    "default: ask if interactive, otherwise false.")
-@click.option('--exclude', '-e', type=str, default=None,
-              help="Git pathspecs to exclude files")
+@click.option('--exclude', '-e', type=str, multiple=True,
+              help='Git pathspecs to exclude from the update commit, e.g. -e "*.py" -e "tests/".')
 def main(context_file: str, branch: str,
-         merge_now: Optional[bool],
+         interactive: bool, merge_now: Optional[bool],
          push_template_branch_changes: Optional[bool],
          exclude: str):
     """Upgrade projects created from a Cookiecutter template"""
@@ -30,7 +32,8 @@ def main(context_file: str, branch: str,
                                    branch,
                                    merge_now,
                                    push_template_branch_changes,
-                                   exclude)
+                                   exclude,
+                                   interactive)
 
 
 def _load_context(context_file: str):

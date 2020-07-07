@@ -45,15 +45,22 @@ Usage: cookiecutter_project_upgrader [OPTIONS]
 Options:
   -c, --context-file PATH         Default: docs/cookiecutter_input.json
   -b, --branch TEXT               Default: cookiecutter-template
+  -i, --interactive               Enter interactive mode. Default behaviour:
+                                  skip questions, use defaults.
+
   -m, --merge-now BOOLEAN         Execute a git merge after a successful
                                   update, default: ask if interactive,
                                   otherwise false.
-  -m, --push-template-branch-changes BOOLEAN
+
+  -p, --push-template-branch-changes BOOLEAN
                                   Push changes to the remote Git branch on a
                                   successful update, default: ask if
                                   interactive, otherwise false.
-  -e, --exclude TEXT              Git pathspecs to exclude files.
-  --help                          Show this message and exit.
+
+  -e, --exclude TEXT              Git pathspecs to exclude from the update
+                                  commit, e.g. -e "*.py" -e "tests/".
+
+  -h, --help                      Show this message and exit.
 
 
 

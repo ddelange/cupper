@@ -47,7 +47,7 @@ def _git_repository_has_local_changes(git_repository: Path):
 
 def update_project_template_branch(context: MutableMapping[str, str], project_directory: str, branch: str,
                                    merge_now: Optional[bool], push_template_branch_changes: Optional[bool],
-                                   exclude_pathspecs: Optional[str]):
+                                   exclude_pathspecs: Optional[str], interactive: bool):
     """Update template branch from a template url"""
     template_url = context['_template']
     tmp_directory = os.path.join(project_directory, ".git", "cookiecutter")
@@ -89,9 +89,11 @@ def update_project_template_branch(context: MutableMapping[str, str], project_di
         subprocess.run(["git", "add", "-A", "."], cwd=tmp_git_worktree_directory, check=True)
 
         if exclude_pathspecs:
-            click.echo("Excluding git pathspecs of: '{}'".format(exclude_pathspecs))
-            subprocess.run(["git", "reset", "HEAD", exclude_pathspecs], cwd=tmp_git_worktree_directory, check=True)
-            subprocess.run(["git", "checkout", exclude_pathspecs], cwd=tmp_git_worktree_directory, check=True)
+            click.echo("Excluding git pathspecs {}".format(exclude_pathspecs))
+            subprocess.run(("git", "reset", "HEAD") + exclude_pathspecs,
+                           cwd=tmp_git_worktree_directory, check=True)
+            subprocess.run(("git", "checkout") + exclude_pathspecs,
+                           cwd=tmp_git_worktree_directory, check=True)
 
         has_changes = _git_repository_has_local_changes(Path(tmp_git_worktree_directory))
         if has_changes:
@@ -99,7 +101,8 @@ def update_project_template_branch(context: MutableMapping[str, str], project_di
             subprocess.run(["git", "commit", "-m", "Update template"],
                            cwd=tmp_git_worktree_directory, check=True)
             push_template_branch_changes = _determine_option(push_template_branch_changes,
-                                                             "Push changes to remote branch?")
+                                                             "Push changes to remote branch?",
+                                                             interactive)
             if push_template_branch_changes:
                 subprocess.run(["git", "push", "origin", branch],
                                cwd=tmp_git_worktree_directory, check=True)
@@ -108,7 +111,7 @@ def update_project_template_branch(context: MutableMapping[str, str], project_di
             click.echo(f"===========")
 
     if has_changes:
-        merge_now = _determine_option(merge_now, "Merge changes into current branch?")
+        merge_now = _determine_option(merge_now, "Merge changes into current branch?", interactive)
         if merge_now:
             result = subprocess.run(["git", "merge", branch],
                                     cwd=project_directory, check=False)
@@ -128,9 +131,9 @@ def update_project_template_branch(context: MutableMapping[str, str], project_di
         click.echo("No changes found")
 
 
-def _determine_option(current_value: Optional[bool], interactive_question_text: str):
+def _determine_option(current_value: Optional[bool], interactive_question_text: str, interactive: bool):
     if current_value is None:
-        if sys.stdout.isatty():
+        if interactive and sys.stdout.isatty():
             current_value = click.confirm(interactive_question_text, default=True)
         else:
             current_value = False
