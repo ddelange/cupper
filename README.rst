@@ -52,6 +52,7 @@ Options:
                                   Push changes to the remote Git branch on a
                                   successful update, default: ask if
                                   interactive, otherwise false.
+  -e, --exclude TEXT              Git pathspecs to exclude files.
   --help                          Show this message and exit.
 
 
