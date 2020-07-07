@@ -74,7 +74,7 @@ def test_initial_run_without_change_on_template_just_initializes_branch(cookiecu
 
     context = json.loads(project_directory.joinpath("docs", "cookiecutter_input.json").read_text(encoding="utf-8"))
     update_project_template_branch(context, str(project_directory), "cookiecutter-template", merge_now=None,
-                                   push_template_branch_changes=False, exclude_pathspecs=None)
+                                   push_template_branch_changes=False, exclude_pathspecs=(), interactive=False)
     subprocess.run(["git", "rev-parse", "cookiecutter-template"], cwd=str(project_directory), check=True)
 
 
@@ -102,7 +102,7 @@ def test_first_run_creates_branch_on_first_commit_and_updates_based_on_template(
 
     context['_template'] = str(cookiecutter_template_directory)
     update_project_template_branch(context, str(project_directory), "cookiecutter-template", merge_now=None,
-                                   push_template_branch_changes=False, exclude_pathspecs=None)
+                                   push_template_branch_changes=False, exclude_pathspecs=(), interactive=False)
 
     subprocess.run(["git", "merge", "cookiecutter-template"], cwd=str(project_directory), check=True)
     readme = project_directory.joinpath("README.rst").read_text(encoding="utf-8")
@@ -137,7 +137,7 @@ def test_change_project_slug(cookiecutter_template_directory: Path,
     new_project_slug = "my_new_name_for_project"
     context['project_slug'] = new_project_slug
     update_project_template_branch(context, str(project_directory), "cookiecutter-template", merge_now=True,
-                                   push_template_branch_changes=False, exclude_pathspecs=None)
+                                   push_template_branch_changes=False, exclude_pathspecs=(), interactive=False)
 
     readme = project_directory.joinpath("README.rst").read_text(encoding="utf-8")
     assert readme == "updated readme"
@@ -160,7 +160,7 @@ def test_exclude_paths(cookiecutter_template_directory: Path,
     context['project_slug'] = 'a_new_name'
 
     update_project_template_branch(context, str(project_directory), "cookiecutter-template", merge_now=True,
-                                   push_template_branch_changes=False, exclude_pathspecs='README.rst')
+                                   push_template_branch_changes=False, exclude_pathspecs=('README.rst',), interactive=False)
 
     readme = project_directory.joinpath("README.rst").read_text(encoding="utf-8")
     assert 'a_new_name' not in readme

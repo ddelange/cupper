@@ -9,7 +9,7 @@ runtime_requirements = [
     'click>=7.0',
 ]
 development_requirements = [
-    'pytest-cookies>=0.3.0',
+    'pytest-cookies~=0.3.0',
     # general setup requirements
     'pip>=19.0.2',
     'bumpversion>=0.5.3',
