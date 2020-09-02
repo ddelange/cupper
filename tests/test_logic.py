@@ -74,7 +74,7 @@ def test_initial_run_without_change_on_template_just_initializes_branch(cookiecu
     subprocess.run(["git", "commit", "-m", "initial"], cwd=str(project_directory), check=True)
 
     context = json.loads(project_directory.joinpath("docs", "cookiecutter_input.json").read_text(encoding="utf-8"))
-    with pytest.raises(ClickException("No changes found")):
+    with pytest.raises(ClickException):
         update_project_template_branch(context, str(project_directory), "cookiecutter-template", merge_now=None,
                                        push_template_branch_changes=False, exclude_pathspecs=(), interactive=False)
     subprocess.run(["git", "rev-parse", "cookiecutter-template"], cwd=str(project_directory), check=True)
