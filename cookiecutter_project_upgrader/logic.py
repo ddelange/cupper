@@ -47,7 +47,7 @@ def _git_repository_has_local_changes(git_repository: Path):
 
 def update_project_template_branch(context: MutableMapping[str, str], project_directory: str, branch: str,
                                    merge_now: Optional[bool], push_template_branch_changes: Optional[bool],
-                                   exclude_pathspecs: Tuple[str], interactive: bool):
+                                   exclude_pathspecs: Tuple[str, ...], interactive: bool):
     """Update template branch from a template url"""
     template_url = context['_template']
     tmp_directory = os.path.join(project_directory, ".git", "cookiecutter")

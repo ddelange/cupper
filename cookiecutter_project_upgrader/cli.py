@@ -23,7 +23,7 @@ from cookiecutter_project_upgrader.logic import update_project_template_branch
 def main(context_file: str, branch: str,
          interactive: bool, merge_now: Optional[bool],
          push_template_branch_changes: Optional[bool],
-         exclude: Tuple[str]):
+         exclude: Tuple[str, ...]):
     """Upgrade projects created from a Cookiecutter template"""
     context = _load_context(context_file)
     project_directory = os.getcwd()

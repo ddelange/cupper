@@ -163,7 +163,7 @@ def test_exclude_paths(cookiecutter_template_directory: Path,
     context['project_slug'] = 'a_new_name'
 
     update_project_template_branch(context, str(project_directory), "cookiecutter-template", merge_now=True,
-                                   push_template_branch_changes=False, exclude_pathspecs=('README.rst',),
+                                   push_template_branch_changes=False, exclude_pathspecs=("README.rst",),
                                    interactive=False)
 
     readme = project_directory.joinpath("README.rst").read_text(encoding="utf-8")
