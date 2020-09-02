@@ -20,3 +20,4 @@ History
 * Add -e flag to exclude git pathspecs from the update.
 * Do not run pre-commit hooks on the update commit.
 * Expose -h flag in addition to --help.
+* Finish with non-zero exit status if there are no changes to be made (for shell piping).
