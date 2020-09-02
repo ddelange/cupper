@@ -3,7 +3,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import MutableMapping, Optional
+from typing import MutableMapping, Optional, Tuple
 
 import click
 from click import ClickException
@@ -47,7 +47,7 @@ def _git_repository_has_local_changes(git_repository: Path):
 
 def update_project_template_branch(context: MutableMapping[str, str], project_directory: str, branch: str,
                                    merge_now: Optional[bool], push_template_branch_changes: Optional[bool],
-                                   exclude_pathspecs: Optional[str], interactive: bool):
+                                   exclude_pathspecs: Tuple[str], interactive: bool):
     """Update template branch from a template url"""
     template_url = context['_template']
     tmp_directory = os.path.join(project_directory, ".git", "cookiecutter")
@@ -108,14 +108,14 @@ def update_project_template_branch(context: MutableMapping[str, str], project_di
                                cwd=tmp_git_worktree_directory, check=True)
             else:
                 click.echo(f"Changes to the branch {branch} have not been pushed to a remote branch.")
-            click.echo(f"===========")
+            click.echo("===========")
 
     if has_changes:
         merge_now = _determine_option(merge_now, "Merge changes into current branch?", interactive)
         if merge_now:
             result = subprocess.run(["git", "merge", branch],
                                     cwd=project_directory, check=False)
-            click.echo(f"===========")
+            click.echo("===========")
             if result.returncode == 0:
                 click.echo("Merged changes successfully.")
             else:
