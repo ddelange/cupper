@@ -128,8 +128,7 @@ def update_project_template_branch(context: MutableMapping[str, str], project_di
                 f"git merge {branch}")
 
     else:
-        click.echo("No changes found")
-        exit(1)
+        raise ClickException("No changes found")
 
 
 def _determine_option(current_value: Optional[bool], interactive_question_text: str, interactive: bool):

@@ -5,6 +5,7 @@ import subprocess
 from contextlib import contextmanager
 from pathlib import Path
 from pytest_cookies import Cookies, Result
+from click import ClickException
 
 from cookiecutter_project_upgrader.logic import update_project_template_branch
 from tests.files import copy_children
@@ -73,8 +74,9 @@ def test_initial_run_without_change_on_template_just_initializes_branch(cookiecu
     subprocess.run(["git", "commit", "-m", "initial"], cwd=str(project_directory), check=True)
 
     context = json.loads(project_directory.joinpath("docs", "cookiecutter_input.json").read_text(encoding="utf-8"))
-    update_project_template_branch(context, str(project_directory), "cookiecutter-template", merge_now=None,
-                                   push_template_branch_changes=False, exclude_pathspecs=(), interactive=False)
+    with pytest.raises(ClickException("No changes found")):
+        update_project_template_branch(context, str(project_directory), "cookiecutter-template", merge_now=None,
+                                       push_template_branch_changes=False, exclude_pathspecs=(), interactive=False)
     subprocess.run(["git", "rev-parse", "cookiecutter-template"], cwd=str(project_directory), check=True)
 
 
